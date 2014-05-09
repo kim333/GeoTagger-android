@@ -1,100 +1,62 @@
 package kr.co.itrees.geotagger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebSettings.PluginState;
-import android.webkit.WebView;
+import android.view.View;
 import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
 
 /**
  * 
- * @author ITREE-DEV (Junwon Lee)
- * @since 2014-04-28
- *
+ * @author 이준원
+ * @since 2014-05-01
+ * @update 2014-05-08 이준원
+ * @charset UTF-8
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity 
+{
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-/*
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-*/
-        TabHost tabHost = (TabHost) findViewById(R.id.tab_host);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TextView btn_add = (TextView) findViewById(R.id.btn_add);
+		
+		
+		// Add 버튼을 누르면 태깅 페이지로 이동
+		btn_add.setOnClickListener(new View.OnClickListener() 
+		{
+			
+			@Override
+			public void onClick(View v) 
+			{
+				Intent i = new Intent(MainActivity.this, TaggingActivity.class);
+				startActivity(i);
+			}
+		});
+		
+		/**
+		 * @since 2014-05-08
+		 * @update 2014-05-08 이준원
+		 * @reference http://blog.naver.com/PostView.nhn?blogId=akj61300&logNo=80126183947
+		 */
+		// 탭 호스트 설정
+		final TabHost tabHost = (TabHost)findViewById(R.id.tabHost);
         tabHost.setup();
-        
-        // 탭 1 : 지도
-        TabSpec tabSpec1 = tabHost.newTabSpec("Map");
-        tabSpec1.setIndicator("Map");
-        tabSpec1.setContent(R.id.tab1);
-        tabHost.addTab(tabSpec1);
-        
-        // 탭 2 : 히스토리
-        TabSpec tabSpec2 = tabHost.newTabSpec("History");
-        tabSpec2.setIndicator("History");
-        tabSpec2.setContent(R.id.tab2);
-        tabHost.addTab(tabSpec2);
-        // 탭 3 : 설정
-        TabSpec tabSpec3 = tabHost.newTabSpec("Settings");
-        tabSpec3.setIndicator("Settings");
-        tabSpec3.setContent(R.id.tab3);
-        tabHost.addTab(tabSpec3);
-        
-        WebView web1 = (WebView)findViewById(R.id.webView1);
-        
-        WebSettings webSettings = web1.getSettings();
-        /*webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setPluginState(PluginState.ON);*/
-        
-        web1.loadUrl("file:///android_asset/www/map.html");
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-/*
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
-*/
+		tabHost.addTab(tabHost.newTabSpec("tab1")
+                .setIndicator("Tag", this.getResources().getDrawable(R.drawable.map_pin_7))
+                .setContent(R.id.Tag));
+		
+        tabHost.addTab(tabHost.newTabSpec("tab2")
+                .setIndicator("History", this.getResources().getDrawable(android.R.drawable.ic_menu_recent_history))
+                .setContent(R.id.History));
+        tabHost.addTab(tabHost.newTabSpec("tab3")
+                .setIndicator("Settings", this.getResources().getDrawable(R.drawable.list_star_7))
+                .setContent(R.id.Settings));
+		
+	}
 }
