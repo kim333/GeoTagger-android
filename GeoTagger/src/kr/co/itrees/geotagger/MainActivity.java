@@ -1,9 +1,14 @@
 package kr.co.itrees.geotagger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -11,7 +16,7 @@ import android.widget.TextView;
  * 
  * @author 이준원
  * @since 2014-05-01
- * @update 2014-05-08 이준원
+ * @update 2014-05-09 이준원
  * @charset UTF-8
  */
 public class MainActivity extends Activity 
@@ -58,5 +63,32 @@ public class MainActivity extends Activity
                 .setIndicator("Settings", this.getResources().getDrawable(R.drawable.list_star_7))
                 .setContent(R.id.Settings));
 		
+        
+        /**
+         * @since 2014-05-09
+         * @update 2014-05-09 이준원
+         * @reference http://sharepid.tistory.com/951
+         */
+        // 히스토리 리스트
+        
+        ArrayList<String> historyList = new ArrayList<String>();
+        //historyList.add("요르단");
+        //historyList.add("시리아");
+        //historyList.add("터키");
+        
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, historyList);
+        		
+        ListView historyListView = (ListView)findViewById(R.id.historyList);
+        historyListView.setAdapter(adapter);
+        historyListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        
+        DBAdapter dba = new DBAdapter(MainActivity.this);
+        List<Location> locList = dba.selectAllLocation();
+        
+        		
+        for(int i = 0; i  < locList.size(); i++)
+        {
+        	historyList.add(locList.get(i).getQ3());
+        }
 	}
 }

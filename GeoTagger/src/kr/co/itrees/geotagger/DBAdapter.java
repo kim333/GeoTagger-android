@@ -74,7 +74,7 @@ public class DBAdapter
     /**
      * @since 2014-05-08 이준원
      * @update 2014-05-08 이준원
-     * @return
+     * 
      */
     public List<Location> selectAllLocation()
     {

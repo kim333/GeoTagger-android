@@ -1,6 +1,9 @@
 package kr.co.itrees.geotagger;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -138,7 +141,7 @@ public class TaggingActivity extends Activity
 				
 				if(chkQ2_7.isChecked())
 				{
-					q2 += ",Woman";
+					q2 += ",Women";
 				}
 				
 				if(chkQ2_8.isChecked())
@@ -245,6 +248,23 @@ public class TaggingActivity extends Activity
 				
 				DBAdapter dba = new DBAdapter(TaggingActivity.this);
 				dba.insertLocation(loc);
+				
+				
+				/* http://shstarkr.tistory.com/158 참고 */
+				ConnectivityManager cManager; 
+				NetworkInfo mobile; 
+				NetworkInfo wifi; 
+				 
+				cManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE); 
+				mobile = cManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE); 
+				wifi = cManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI); 
+				 
+				if(mobile.isConnected() || wifi.isConnected())
+				{
+				    //3G 또는 WiFi 에 연결되어 있을 경우 
+					HttpRequestHelper postHelper = new HttpRequestHelper();
+					postHelper.sendLocation(loc);
+				}
 				
 				finish();
 			}
