@@ -3,6 +3,7 @@ package kr.co.itrees.geotagger;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -10,6 +11,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,112 +75,120 @@ public class HttpRequestHelper
 		
 		try 
 		{
-			jobj.put("orig_id", "123");
+			//jobj.put("orig_id", "123");
 			
 			if(q1list.contains("Evangelism"))
 			{
-				jobj.put("evanType", true);
+				jobj.put("evanType", "true");
+			}
+			else
+			{
+				jobj.put("evanType", "false");
 			}
 			
 			if(q1list.contains("Training"))
 			{
-				jobj.put("trainType", true);
+				jobj.put("trainType", "true");
+			}
+			else
+			{
+				jobj.put("trainType", "false");
 			}
 			
 			if(q1list.contains("Mercy"))
 			{
-				jobj.put("mercyType", true);
+				jobj.put("mercyType", "true");
 			}
 			
 			// for question 2
 			if(q2list.contains("Youth / Children"))
 			{
-				jobj.put("youthType", true);
+				jobj.put("youthType", "true");
 			}
 			
 			if(q2list.contains("Campus Ministry"))
 			{
-				jobj.put("campusType", true);
+				jobj.put("campusType", "true");
 			}
 			
 			if(q2list.contains("Indigenous People"))
 			{
-				jobj.put("indigineousType", true);
+				jobj.put("indigineousType", "true");
 			}
 			
 			if(q2list.contains("Prison Ministry"))
 			{
-				jobj.put("prisonType", true);
+				jobj.put("prisonType", "true");
 			}
 			
 			if(q2list.contains("Prostitutes"))
 			{
-				jobj.put("prostitutesType", true);
+				jobj.put("prostitutesType", "true");
 			}
 			
 			if(q2list.contains("Orphans"))
 			{
-				jobj.put("orphansType", true);
+				jobj.put("orphansType", "true");
 			}
 			
 			if(q2list.contains("Women"))
 			{
-				jobj.put("womenType", true);
+				jobj.put("womenType", "true");
 			}
 			
 			if(q2list.contains("Urban Ministry"))
 			{
-				jobj.put("urbanType", true);
+				jobj.put("urbanType", "true");
 			}
 			
 			if(q2list.contains("Hospital Ministry"))
 			{
-				jobj.put("hospitalType", true);
+				jobj.put("hospitalType", "true");
 			}
 			
 			if(q2list.contains("Media / Communications"))
 			{
-				jobj.put("mediaType", true);
+				jobj.put("mediaType", "true");
 			}
 			
 			if(q2list.contains("Community Development"))
 			{
-				jobj.put("communityDevType", true);
+				jobj.put("communityDevType", "true");
 			}
 			
 			if(q2list.contains("Bible Studies"))
 			{
-				jobj.put("bibleStudyType", true);
+				jobj.put("bibleStudyType", "true");
 			}
 			
 			if(q2list.contains("Church Planting"))
 			{
-				jobj.put("churchPlantingType", true);
+				jobj.put("churchPlantingType", "true");
 			}
 			
 			if(q2list.contains("Arts / Entertainment / Sports"))
 			{
-				jobj.put("artsType", true);
+				jobj.put("artsType", "true");
 			}
 			
 			if(q2list.contains("Counseling"))
 			{
-				jobj.put("counselingType", true);
+				jobj.put("counselingType", "true");
 			}
 			
 			if(q2list.contains("Healthcare"))
 			{
-				jobj.put("healthcareType", true);
+				jobj.put("healthcareType", "true");
 			}
 			
 			if(q2list.contains("Maintenance / Construction"))
 			{
-				jobj.put("constructionType", true);
+				jobj.put("constructionType", "true");
 			}
 			
 			if(q2list.contains("Research"))
 			{
-				jobj.put("researchType", true);
+				jobj.put("researchType", "true");
 			}
 			
 			jobj.put("desc", q3);
@@ -198,8 +208,10 @@ public class HttpRequestHelper
 			jobj.put("contactPhone", contactPhone);
 			jobj.put("contactWebsite", contactWebsite);
 			
-			jobj.put("lat", lat.toString());
-			jobj.put("lon", lon.toString());
+			jobj.put("latitude", lat);
+			jobj.put("longitude", lon);
+			
+			jobj.put("created", new Date());
 			
 			jobj.put("user", "/api/0.1/user/2/");
 		} 
@@ -215,7 +227,10 @@ public class HttpRequestHelper
 		
 		try 
 		{
-			StringEntity se = new StringEntity(jobj.toString());
+			String jsonStr = jobj.toString();
+			//StringEntity se = new StringEntity(jsonStr, HTTP.UTF_8);
+			StringEntity se = new StringEntity("{\"urbanType\":\"false\",\"counselingType\":\"false\",\"mediaType\":\"false\",\"created\":\"2013-11-30 06:57:04 +0000\",\"bibleStudyType\":\"false\",\"photoId\":null,\"evanType\":\"true\",\"hospitalType\":\"false\",\"prostitutesType\":\"false\",\"latitude\":63.233,\"orphansType\":\"false\",\"contactEmail\":\"\",\"researchType\":\"false\",\"contactWebsite\":\"\",\"campusType\":\"false\",\"communityDevType\":\"false\",\"contactConfirmed\":\"false\",\"desc\":\"\",\"indigenousType\":\"true\",\"longitude\":-122.406417,\"artsType\":\"false\",\"prisonType\":\"false\",\"womenType\":\"false\",\"contactPhone\":\"\",\"healthcareType\":\"false\",\"churchPlantingType\":\"false\",\"constructionType\":\"false\",\"youthType\":\"true\",\"trainType\":\"false\",\"mercyType\":\"false\",\"tags\":\"\"}");	
+			
 			se.setContentType("application/json");
 			request.setEntity(se);
 			
