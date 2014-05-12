@@ -12,12 +12,12 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-/**
+/*
  * 
- * @author 이준원
- * @since 2014-05-01
- * @update 2014-05-09 이준원
- * @charset UTF-8
+ * author 이준원
+ * since 2014-05-01
+ * update 2014-05-09 이준원
+ * charset UTF-8
  */
 public class MainActivity extends Activity 
 {
@@ -43,10 +43,10 @@ public class MainActivity extends Activity
 			}
 		});
 		
-		/**
-		 * @since 2014-05-08
-		 * @update 2014-05-08 이준원
-		 * @reference http://blog.naver.com/PostView.nhn?blogId=akj61300&logNo=80126183947
+		/*
+		 * since 2014-05-08
+		 * update 2014-05-08 이준원
+		 * reference http://blog.naver.com/PostView.nhn?blogId=akj61300&logNo=80126183947
 		 */
 		// 탭 호스트 설정
 		final TabHost tabHost = (TabHost)findViewById(R.id.tabHost);
@@ -64,10 +64,10 @@ public class MainActivity extends Activity
                 .setContent(R.id.Settings));
 		
         
-        /**
-         * @since 2014-05-09
-         * @update 2014-05-09 이준원
-         * @reference http://sharepid.tistory.com/951
+        /*
+         * since 2014-05-09
+         * update 2014-05-09 이준원
+         * reference http://sharepid.tistory.com/951
          */
         // 히스토리 리스트
         

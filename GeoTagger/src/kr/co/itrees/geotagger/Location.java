@@ -1,11 +1,11 @@
 package kr.co.itrees.geotagger;
 
 import java.sql.Timestamp;
-/**
+/*
  * 
- * @author 이준원
- * @since 2014-05-08
- * @update 2014-05-08
+ * author 이준원
+ * since 2014-05-08
+ * update 2014-05-08
  */
 public class Location 
 {

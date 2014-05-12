@@ -3,44 +3,39 @@ package kr.co.itrees.geotagger;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
+/*
  * 
- * @author 이준원
- * @since 2014-05-11
- * @update 2014-05-11 (이준원)
- * @charset UTF-8
+ * author 이준원
+ * since 2014-05-11
+ * update 2014-05-11 (이준원)
+ * charset UTF-8
  */
 public class HttpRequestHelper 
 {
 	@SuppressWarnings("unchecked")
-	public void sendLocation(Location loc)
+	public String sendLocation(Location loc)
 	{
 		HttpPost request = new HttpPost("http://192.237.166.7/api/0.1/location/");
 		
+		request.setHeader("Accept", "application/json");
 		request.setHeader("Content-Type", "application/json");
 		request.setHeader("Authorization", "ApiKey tester:1a2b3c4d5e");
-		
-		Vector<BasicNameValuePair> entity = new Vector<BasicNameValuePair>();
-		
-		
-		
-		entity.add(new BasicNameValuePair("orig_id", "123"));
-		
+			
 		String[] q1 = loc.getQ1().split(",");
-		String[] q2 = loc.getQ1().split(",");
+		String[] q2 = loc.getQ2().split(",");
 		String q3 = loc.getQ3();				// description
-		String[] q4 = loc.getQ1().split(",");	// tags
+		String[] q4 = loc.getQ4().split(",");	// tags
 		String q5 = loc.getQ5(); 				// contactConfirmed
 		
 		String contactEmail = loc.getEmail();
@@ -74,148 +69,155 @@ public class HttpRequestHelper
 			q5 = "false";
 		}
 		
-		
-		// for question 1
-		if(q1list.contains("Evangelism"))
-		{
-			entity.add(new BasicNameValuePair("evanType", "true"));
-		}
-		
-		if(q1list.contains("Training"))
-		{
-			entity.add(new BasicNameValuePair("trainType", "true"));
-		}
-		
-		if(q1list.contains("Mercy"))
-		{
-			entity.add(new BasicNameValuePair("mercyType", "true"));
-		}
-		
-		// for question 2
-		if(q2list.contains("Youth / Children"))
-		{
-			entity.add(new BasicNameValuePair("youthType", "true"));
-		}
-		
-		if(q2list.contains("Campus Ministry"))
-		{
-			entity.add(new BasicNameValuePair("campusType", "true"));
-		}
-		
-		if(q2list.contains("Indigenous People"))
-		{
-			entity.add(new BasicNameValuePair("indigineousType", "true"));
-		}
-		
-		if(q2list.contains("Prison Ministry"))
-		{
-			entity.add(new BasicNameValuePair("prisonType", "true"));
-		}
-		
-		if(q2list.contains("Prostitutes"))
-		{
-			entity.add(new BasicNameValuePair("prostitutesType", "true"));
-		}
-		
-		if(q2list.contains("Orphans"))
-		{
-			entity.add(new BasicNameValuePair("orphansType", "true"));
-		}
-		
-		if(q2list.contains("Women"))
-		{
-			entity.add(new BasicNameValuePair("womenType", "true"));
-		}
-		
-		if(q2list.contains("Urban Ministry"))
-		{
-			entity.add(new BasicNameValuePair("urbanType", "true"));
-		}
-		
-		if(q2list.contains("Hospital Ministry"))
-		{
-			entity.add(new BasicNameValuePair("hospitalType", "true"));
-		}
-		
-		if(q2list.contains("Media / Communications"))
-		{
-			entity.add(new BasicNameValuePair("mediaType", "true"));
-		}
-		
-		if(q2list.contains("Community Development"))
-		{
-			entity.add(new BasicNameValuePair("communityDevType", "true"));
-		}
-		
-		if(q2list.contains("Bible Studies"))
-		{
-			entity.add(new BasicNameValuePair("bibleStudyType", "true"));
-		}
-		
-		if(q2list.contains("Church Planting"))
-		{
-			entity.add(new BasicNameValuePair("churchPlantingType", "true"));
-		}
-		
-		if(q2list.contains("Arts / Entertainment / Sports"))
-		{
-			entity.add(new BasicNameValuePair("artsType", "true"));
-		}
-		
-		if(q2list.contains("Counseling"))
-		{
-			entity.add(new BasicNameValuePair("counselingType", "true"));
-		}
-		
-		if(q2list.contains("Healthcare"))
-		{
-			entity.add(new BasicNameValuePair("healthcareType", "true"));
-		}
-		
-		if(q2list.contains("Maintenance / Construction"))
-		{
-			entity.add(new BasicNameValuePair("constructionType", "true"));
-		}
-		
-		if(q2list.contains("Research"))
-		{
-			entity.add(new BasicNameValuePair("researchType", "true"));
-		}
-		
-		entity.add(new BasicNameValuePair("desc", q3));
-		
-		String tags = "[";
-		for(int i = 0; i < q4.length; i++)
-		{
-			tags += q4[i];
-			
-			if(i == q4.length)
-			{
-				tags += "]";
-				break;
-			}
-			tags += ",";
-		}
-		
-		entity.add(new BasicNameValuePair("tags", tags));
-		
-		
-		
-		entity.add(new BasicNameValuePair("contactConfirmed", q5));
-		
-		entity.add(new BasicNameValuePair("contactEmail", contactEmail));
-		entity.add(new BasicNameValuePair("contactPhone", contactPhone));
-		entity.add(new BasicNameValuePair("contactWebsite", contactWebsite));
-		
-		entity.add(new BasicNameValuePair("lat", lat.toString()));
-		entity.add(new BasicNameValuePair("lon", lon.toString()));
-		
-		entity.add(new BasicNameValuePair("user", "/api/0.1/user/2/"));
+		JSONObject jobj = new JSONObject();
 		
 		try 
 		{
-			UrlEncodedFormEntity ent = new UrlEncodedFormEntity(entity, HTTP.UTF_8);
-			request.setEntity(ent);
+			jobj.put("orig_id", "123");
+			
+			if(q1list.contains("Evangelism"))
+			{
+				jobj.put("evanType", true);
+			}
+			
+			if(q1list.contains("Training"))
+			{
+				jobj.put("trainType", true);
+			}
+			
+			if(q1list.contains("Mercy"))
+			{
+				jobj.put("mercyType", true);
+			}
+			
+			// for question 2
+			if(q2list.contains("Youth / Children"))
+			{
+				jobj.put("youthType", true);
+			}
+			
+			if(q2list.contains("Campus Ministry"))
+			{
+				jobj.put("campusType", true);
+			}
+			
+			if(q2list.contains("Indigenous People"))
+			{
+				jobj.put("indigineousType", true);
+			}
+			
+			if(q2list.contains("Prison Ministry"))
+			{
+				jobj.put("prisonType", true);
+			}
+			
+			if(q2list.contains("Prostitutes"))
+			{
+				jobj.put("prostitutesType", true);
+			}
+			
+			if(q2list.contains("Orphans"))
+			{
+				jobj.put("orphansType", true);
+			}
+			
+			if(q2list.contains("Women"))
+			{
+				jobj.put("womenType", true);
+			}
+			
+			if(q2list.contains("Urban Ministry"))
+			{
+				jobj.put("urbanType", true);
+			}
+			
+			if(q2list.contains("Hospital Ministry"))
+			{
+				jobj.put("hospitalType", true);
+			}
+			
+			if(q2list.contains("Media / Communications"))
+			{
+				jobj.put("mediaType", true);
+			}
+			
+			if(q2list.contains("Community Development"))
+			{
+				jobj.put("communityDevType", true);
+			}
+			
+			if(q2list.contains("Bible Studies"))
+			{
+				jobj.put("bibleStudyType", true);
+			}
+			
+			if(q2list.contains("Church Planting"))
+			{
+				jobj.put("churchPlantingType", true);
+			}
+			
+			if(q2list.contains("Arts / Entertainment / Sports"))
+			{
+				jobj.put("artsType", true);
+			}
+			
+			if(q2list.contains("Counseling"))
+			{
+				jobj.put("counselingType", true);
+			}
+			
+			if(q2list.contains("Healthcare"))
+			{
+				jobj.put("healthcareType", true);
+			}
+			
+			if(q2list.contains("Maintenance / Construction"))
+			{
+				jobj.put("constructionType", true);
+			}
+			
+			if(q2list.contains("Research"))
+			{
+				jobj.put("researchType", true);
+			}
+			
+			jobj.put("desc", q3);
+			
+			JSONArray jarr = new JSONArray();
+			
+			for(int i = 0; i < q4.length; i++)
+			{
+				jarr.put(q4[i]);
+			}
+			
+			jobj.put("tags", jarr);
+			
+			jobj.put("contactConfirmed", q5);
+			
+			jobj.put("contactEmail", contactEmail);
+			jobj.put("contactPhone", contactPhone);
+			jobj.put("contactWebsite", contactWebsite);
+			
+			jobj.put("lat", lat.toString());
+			jobj.put("lon", lon.toString());
+			
+			jobj.put("user", "/api/0.1/user/2/");
+		} 
+		
+		catch (JSONException e2) 
+		{
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
+		
+		
+		try 
+		{
+			StringEntity se = new StringEntity(jobj.toString());
+			se.setContentType("application/json");
+			request.setEntity(se);
 			
 			
 			HttpClient client = new DefaultHttpClient();
@@ -223,7 +225,7 @@ public class HttpRequestHelper
 			@SuppressWarnings("rawtypes")
 			ResponseHandler reshandler = new BasicResponseHandler();
 			
-			client.execute(request, reshandler);
+			return client.execute(request, reshandler);
 			
 		} 
 		
@@ -231,12 +233,16 @@ public class HttpRequestHelper
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			
+			return null;
 		}
 		
 		catch (IOException e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			return null;
 		}
 		
 	}

@@ -4,13 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
+/*
  * 
- * @author 이준원
- * @since 2014-05-07
- * @update 2014-05-07 이준원
- * @reference http://whitememo.tistory.com/241
- * @charset UTF-8
+ * author 이준원
+ * since 2014-05-07
+ * update 2014-05-07 이준원
+ * reference http://whitememo.tistory.com/241
+ * charset UTF-8
  */
 public class DBHelper extends  SQLiteOpenHelper 
 {

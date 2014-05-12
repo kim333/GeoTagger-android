@@ -10,12 +10,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
+/*
  * 
- * @author 이준원
- * @since 2014-05-01
- * @update 2014-05-08 이준원
- * @charset UTF-8
+ * author 이준원
+ * since 2014-05-01
+ * update 2014-05-08 이준원
+ * charset UTF-8
  */
 public class TaggingActivity extends Activity 
 {
@@ -199,12 +199,12 @@ public class TaggingActivity extends Activity
 					q2 += ",Research";
 				}
 				
-				if(q1.charAt(0) == ',')
+				if(q1.length() > 1 && q1.charAt(0) == ',')
 				{
 					q1 = q1.substring(1);
 				}
 				
-				if(q2.charAt(0) == ',')
+				if(q2.length() > 1 && q2.charAt(0) == ',')
 				{
 					q2 = q2.substring(1);
 				}
@@ -263,7 +263,9 @@ public class TaggingActivity extends Activity
 				{
 				    //3G 또는 WiFi 에 연결되어 있을 경우 
 					HttpRequestHelper postHelper = new HttpRequestHelper();
-					postHelper.sendLocation(loc);
+					String result = postHelper.sendLocation(loc);
+					
+					System.out.println(result);
 				}
 				
 				finish();
